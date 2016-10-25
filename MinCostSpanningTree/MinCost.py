@@ -4,7 +4,6 @@ Created on Sat Oct 22 16:00:20 2016
 
 @author: Zander
 """
-
 class Node:
     def __init__(self, value):
         self.Value = value
@@ -120,14 +119,52 @@ def MinCostSpanningTree(graph):
             print("CREATING EDGE")
             mst.AddDirectedEdge(mst.Nodes[uIndex], mst.Nodes[vIndex])
     
-    return mst;
-    
+    return mst
+
+
 
 with open('data.txt') as file:
     graphData = [[int(digit) for digit in line.strip()] for line in file]
 
-inputGraph = GraphBuilder(graphData)
+#inputGraph = GraphBuilder(graphData)
 
-print()
+#print()
 
-MinCostSpanningTree(inputGraph).Print()
+#MinCostSpanningTree(inputGraph).Print()
+
+file2 = (open('graph.txt', 'r')).read().split("(")
+graphTreeData = list()
+for numberSet in file2:
+    singleEdge = list()
+    for digit in numberSet:
+        if digit.isdigit():
+            singleEdge.append(digit)
+    graphTreeData.append(singleEdge)
+
+#graphTreeData = [int(x) for x in graphTreeData.split() if x.isdigit()]
+
+def buildTree(data):
+    print("Tree data: " + str(data))
+    nGrid = int(data[0][0]) ** 2
+
+    tree = Graph()
+
+    for x in range(nGrid):
+        tree.AddNode(Node(x + 1))
+
+    count = 1
+
+    while (count < len(data)):
+        startNode = list(filter(lambda node: node.Value == int(data[count][0]), tree.Nodes))
+        endNode = list(filter(lambda node: node.Value == int(data[count][1]), tree.Nodes))
+        tree.AddDirectedEdge(startNode[0], endNode[0], int(data[count][2]))
+
+        count = count + 1
+
+    return tree
+
+t = buildTree(graphTreeData)
+
+t.Print()
+
+MinCostSpanningTree(t).Print()
