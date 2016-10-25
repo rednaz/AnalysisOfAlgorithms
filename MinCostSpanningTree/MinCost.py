@@ -5,6 +5,8 @@ Created on Sat Oct 22 16:00:20 2016
 @author: Zander
 """
 
+import math
+
 class Node:
     def __init__(self, value):
         self.Value = value
@@ -30,12 +32,67 @@ class Graph:
         self.AddDirectedEdge(startNode, endNode, weight)
         self.AddDirectedEdge(endNode, startNode, weight)
         
-    def Print(self):
-        for node in self.Nodes:
-            for edge in node.Edges:
-                nodeValue = node.Value
-                edgeNodeValue = edge.ToNode.Value
-                print(str(nodeValue) + '->' + str(edgeNodeValue))
+    def Print(self):                
+        size = int(math.sqrt(len(self.Nodes)))
+
+        row = 0
+
+        self.PrintNodeLine(row, size)
+        
+        while (row < size - 1):
+            self.PrintEdgeLine(row, size)
+        
+            row = row + 1
+            
+            self.PrintNodeLine(row, size)
+    
+    def PrintEdgeLine(self, row, size):
+            #* - * - * - *
+            #|   |   |   |
+        line = ""
+        
+        node = row * size
+        
+        while (int(node / size) == row):
+            node  = node + 1
+            
+            if (self.NodeInEdges(self.Nodes[node - 1], self.Nodes[node + 3].Edges) or self.NodeInEdges(self.Nodes[node + 3], self.Nodes[node - 1].Edges)):
+                line = line + "| "
+            else:
+                line = line + "  "  
+            
+            line = line + "  "
+            
+        print (line)
+        
+    def PrintNodeLine(self, row, size):        
+        line = ""
+        
+        node = row * size
+        
+        line = line + "* "
+        
+        node = node + 1
+        
+        while(int(node / size) == row):  
+            
+            if (self.NodeInEdges(self.Nodes[node - 1], self.Nodes[node].Edges) or self.NodeInEdges(self.Nodes[node], self.Nodes[node - 1].Edges)):
+                line = line + "- "
+            else:
+                line = line + "  "   
+                          
+            line = line + "* "
+                
+            node = node + 1            
+        
+        print(line)
+        
+    def NodeInEdges(self, node, edges):
+        for edge in edges:
+            if edge.ToNode == node:
+                return True
+        
+        return False
 
 def GraphBuilder(adjacencyMatrix):
     size = len(adjacencyMatrix)
