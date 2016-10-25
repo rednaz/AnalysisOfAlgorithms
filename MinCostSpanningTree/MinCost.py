@@ -56,7 +56,7 @@ class Graph:
         while (int(node / size) == row):
             node  = node + 1
             
-            if (self.NodeInEdges(self.Nodes[node - 1], self.Nodes[node + 3].Edges) or self.NodeInEdges(self.Nodes[node + 3], self.Nodes[node - 1].Edges)):
+            if (self.NodeInEdges(self.Nodes[node - 1], self.Nodes[node + size - 1].Edges) or self.NodeInEdges(self.Nodes[node + size - 1], self.Nodes[node - 1].Edges)):
                 line = line + "| "
             else:
                 line = line + "  "  
@@ -174,17 +174,49 @@ def MinCostSpanningTree(graph):
         vIndex = graph.Nodes.index(edge.ToNode)
         
         if (setBuckets.ChangeBuckets(edge.FromNode, edge.ToNode)):
-            print("CREATING EDGE")
             mst.AddDirectedEdge(mst.Nodes[uIndex], mst.Nodes[vIndex])
     
-    return mst;
-    
+    return mst
 
-with open('data.txt') as file:
-    graphData = [[int(digit) for digit in line.strip()] for line in file]
+file2 = (open('graph.txt', 'r')).read().split("(")
+graphTreeData = list()
+for numberSet in file2:
+    singleEdge = list()
+    temp = ""
+    for digit in numberSet:
+        if digit.isdigit():
+            temp = temp + digit
+        elif temp != "":
+            singleEdge.append(temp)
+            temp = ""
+    graphTreeData.append(singleEdge)
 
-inputGraph = GraphBuilder(graphData)
+#graphTreeData = [int(x) for x in graphTreeData.split() if x.isdigit()]
+
+def buildTree(data):
+    print("Tree data: " + str(data))
+    nGrid = int(data[0][0]) ** 2
+
+    tree = Graph()
+
+    for x in range(nGrid):
+        tree.AddNode(Node(x + 1))
+
+    count = 1
+
+    while (count < len(data)):
+        startNode = list(filter(lambda node: node.Value == int(data[count][0]), tree.Nodes))
+        endNode = list(filter(lambda node: node.Value == int(data[count][1]), tree.Nodes))
+        tree.AddDirectedEdge(startNode[0], endNode[0], int(data[count][2]))
+
+        count = count + 1
+
+    return tree
+
+t = buildTree(graphTreeData)
+
+t.Print()
 
 print()
 
-MinCostSpanningTree(inputGraph).Print()
+MinCostSpanningTree(t).Print()
