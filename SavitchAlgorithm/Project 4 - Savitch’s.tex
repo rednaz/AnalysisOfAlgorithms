@@ -1,0 +1,44 @@
+\documentclass[]{article}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\let\oldReturn\Return
+\renewcommand{\Return}{\State\oldReturn}
+
+%opening
+\title{Savitch's Algorithm}
+\author{Mason U'Ren, James Musselman, Zander Nelson}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Savitch's algorithm is a clever divide and conquer solution to the graph reachability problem. The goal is not finding the shortest path from some node $s$ to node $t$ but establishing that there is a path that exists between these two nodes. We assume that the graph $G$ in question is an $n\times n$ adjacency matrix which means that is takes exactly $n^2$ bits of memory. The key to this algorithm is recursion, so the information does not need to be presented in its entirety. The core idea, although somewhat trivial, is that if a path exists from $u$ to $v$ of length at most $2^i$, then there must be a mid-point $w$. This can be modeled by the equation:
+\begin{center}
+	$R(G,u,v,i) \iff (\exists w)[R(G,u,w,i - 1) \wedge R(G,w,v,i - 1)]$
+\end{center}
+\end{abstract}
+
+\begin{algorithm}
+	\caption{Savitch's Algorithm}
+	\begin{algorithmic}[1]
+		\If{i = 0}
+			\If{u = v}
+				\Return True
+			\ElsIf{(u,v) is an edge}
+				\Return True
+			\EndIf
+		\Else
+			\For{every vertex w}
+				\If{R(G,u,w,i - 1) and R(G,w,v,i - 1)}
+					\Return True
+				\EndIf
+			\EndFor
+		\EndIf
+		\Return False
+	\end{algorithmic}
+\end{algorithm}
+
+\section{}
+
+\end{document}
