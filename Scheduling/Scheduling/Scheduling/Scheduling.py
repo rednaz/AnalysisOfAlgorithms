@@ -51,4 +51,10 @@ activities.append(ActivityInfo(2, 2, 6, 30))
 activities.append(ActivityInfo(3, 3, 6, 20))
 activities.append(ActivityInfo(4, 2, 10 , 30))
 
+# with open('schedules.txt') as f:
+#     for line in f:
+#         int_list = [int(i) for i in line.split()]
+#         activities.append(ActivityInfo(int_list(0), int_list(1), int_list(2), int_list(3)))
+#         print int_list
+
 print(ActivitySelector(activities))
