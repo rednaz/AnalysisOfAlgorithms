@@ -1,3 +1,7 @@
+#Zender Nelson, Mason Urnen, James Musselman
+#Comp 569
+#Assignment 5, Problem 4.23
+
 # 1Weighted-Activity-Selection(S):  // S = list of activities
 # 2 
 # 3     sort S by finish time
@@ -57,15 +61,28 @@ def ActivitySelector(activities):
     return optimal
 
 activities = list()
-activities.append(ActivityInfo(3, 3, 6, 20))
-activities.append(ActivityInfo(1, 0, 3, 20))
-activities.append(ActivityInfo(2, 2, 6, 30))
-activities.append(ActivityInfo(4, 2, 10 , 30))
+# activities.append(ActivityInfo(3, 3, 6, 20))
+# activities.append(ActivityInfo(1, 0, 3, 20))
+# activities.append(ActivityInfo(2, 2, 6, 30))
+# activities.append(ActivityInfo(4, 2, 10 , 30))
 
-# with open('schedules.txt') as f:
-#     for line in f:
-#         int_list = [int(i) for i in line.split()]
-#         activities.append(ActivityInfo(int_list(0), int_list(1), int_list(2),
-#         int_list(3)))
-#         print int_list
+with open('schedules.txt') as f:
+    print("Inputed Schedules")
+    for line in f:
+        int_list = list()
+
+        #---Printing schedules---
+        print("(", end="")
+        count = 0
+        for i in line.split():
+            count += 1
+            int_list.append(int(i))
+            print(i, end="")
+            if (count == 4):
+                print(")")
+            else:
+                print(", ", end="")
+
+        activities.append(ActivityInfo(int_list[0], int_list[1], int_list[2], int_list[3]))
+
 print(ActivitySelector(activities))
