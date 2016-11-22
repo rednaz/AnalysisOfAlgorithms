@@ -17,8 +17,7 @@ import math
 import copy
 
 class ActivityInfo():
-    def __init__(self, activity, startTime, endTime, weight):
-        self.Activity = activity
+    def __init__(self, startTime, endTime, weight):
         self.StartTime = startTime
         self.EndTime = endTime
         self.Weight = weight
@@ -73,17 +72,6 @@ def ActivitySelector(activities):
 
 activities = list()
 
-# with open('schedules.txt') as f:
-#     for line in f:
-#         int_list = [int(i) for i in line.split()]
-#         activities.append(ActivityInfo(int_list(0), int_list(1), int_list(2),
-#         int_list(3)))
-#         print int_list
-# activities.append(ActivityInfo(3, 3, 6, 20))
-# activities.append(ActivityInfo(1, 0, 3, 20))
-# activities.append(ActivityInfo(2, 2, 6, 30))
-# activities.append(ActivityInfo(4, 2, 10 , 30))
-
 with open('schedules.txt') as f:
     print("Inputed Schedules")
     for line in f:
@@ -96,12 +84,12 @@ with open('schedules.txt') as f:
             count += 1
             int_list.append(int(i))
             print(i, end="")
-            if (count == 4):
+            if (count == 3):
                 print(")")
             else:
                 print(", ", end="")
 
-        activities.append(ActivityInfo(int_list[0], int_list[1], int_list[2], int_list[3]))
+        activities.append(ActivityInfo(int_list[0], int_list[1], int_list[2]))
 
 print()
 
