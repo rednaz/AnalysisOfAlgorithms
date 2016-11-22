@@ -10,6 +10,7 @@
 #10     return opt[n]
 
 import math
+import copy
 
 class ActivityInfo():
     def __init__(self, activity, startTime, endTime, weight):
@@ -18,49 +19,64 @@ class ActivityInfo():
         self.EndTime = endTime
         self.Weight = weight
 
-def StartActivityBinarySearch(activities, startTime):
-    return ActivityBinarySearch(activities, startTime, 0, len(activities) - 1)
+class OptimalInfo():
+    def __init__(self):
+        self.ActivityList = list()
+        self.Profit = 0
+    def AddActivity(self, activity, profit):
+        self.ActivityList.append(activity)
+        self.Profit += profit
 
-def ActivityBinarySearch(activities, startTime, startIndex, endIndex):
+def StartActivityBinarySearch(endTimes, startTime):
+    return ActivityBinarySearch(endTimes, startTime, 0, len(activities) - 1)
+
+def ActivityBinarySearch(endTimes, startTime, startIndex, endIndex):
     if (startIndex == endIndex):
         return startIndex
 
     midPoint = math.floor((endIndex - startIndex) / 2) + startIndex
 
-    if (activities[midPoint].EndTime <= startTime):
-        return ActivityBinarySearch(activities, startTime, midPoint + 1, endIndex)
+    if (endTimes[midPoint] <= startTime):
+        return ActivityBinarySearch(endTimes, startTime, midPoint, endIndex)
 
-    return ActivityBinarySearch(activities, startTime, startIndex, midPoint - 1)
+    return ActivityBinarySearch(endTimes, startTime, startIndex, midPoint - 1)
 
 def ActivitySelector(activities):
     activities.sort(key=lambda activity: activity.EndTime)
 
     n = len(activities)
 
-    optimal = [0 for x in range(0,n)]
+    optimal = [OptimalInfo() for x in range(0,n)]
     endTimes = list(set([activities[x].EndTime for x in range(0,n)]))
+    endTimes.append(0)
 
     endTimes.sort()
     k = len(endTimes)
     
     for j in range(1,k):
-        max = optimal[j-1]
+        max = optimal[j - 1]
 
-        for i in range(1,n):
+        for i in range(0,n):
             if (activities[i].EndTime == endTimes[j]):
-                newValue = activities[i].Weight + optimal[0]
-                if (newValue > max):
-                    max = newValue
+                newOptimal = copy.deepcopy(optimal[StartActivityBinarySearch(endTimes, activities[i].StartTime)])
+                newOptimal.AddActivity(i, activities[i].Weight)
+                if (newOptimal.Profit > max.Profit):
+                    max = newOptimal
 
         optimal[j] = max
 
-    return optimal
+    return optimal[k-1]
 
 activities = list()
-activities.append(ActivityInfo(3, 3, 6, 20))
 activities.append(ActivityInfo(1, 0, 3, 20))
 activities.append(ActivityInfo(2, 2, 6, 30))
+activities.append(ActivityInfo(3, 3, 6, 20))
 activities.append(ActivityInfo(4, 2, 10 , 30))
+
+optimal = ActivitySelector(activities)
+
+print(optimal.ActivityList)
+print(optimal.Profit)
 
 # with open('schedules.txt') as f:
 #     for line in f:
