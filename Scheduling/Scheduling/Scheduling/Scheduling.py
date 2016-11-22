@@ -38,23 +38,34 @@ def ActivitySelector(activities):
     n = len(activities)
 
     optimal = [0 for x in range(0,n)]
+    endTimes = list(set([activities[x].EndTime for x in range(0,n)]))
 
-    for i in range(0, n):
-        t = StartActivityBinarySearch(activities, activities[i].StartTime)
-        optimal[i] = max(optimal[i - 1], optimal[t] + activities[i].Weight)
+    endTimes.sort()
+    k = len(endTimes)
+    
+    for j in range(1,k):
+        max = optimal[j-1]
 
-    return optimal[n - 1]
+        for i in range(1,n):
+            if (activities[i].EndTime == endTimes[j]):
+                newValue = activities[i].Weight + optimal[0]
+                if (newValue > max):
+                    max = newValue
+
+        optimal[j] = max
+
+    return optimal
 
 activities = list()
+activities.append(ActivityInfo(3, 3, 6, 20))
 activities.append(ActivityInfo(1, 0, 3, 20))
 activities.append(ActivityInfo(2, 2, 6, 30))
-activities.append(ActivityInfo(3, 3, 6, 20))
 activities.append(ActivityInfo(4, 2, 10 , 30))
 
 # with open('schedules.txt') as f:
 #     for line in f:
 #         int_list = [int(i) for i in line.split()]
-#         activities.append(ActivityInfo(int_list(0), int_list(1), int_list(2), int_list(3)))
+#         activities.append(ActivityInfo(int_list(0), int_list(1), int_list(2),
+#         int_list(3)))
 #         print int_list
-
 print(ActivitySelector(activities))
