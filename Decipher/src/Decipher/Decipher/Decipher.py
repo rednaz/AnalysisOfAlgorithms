@@ -16,10 +16,7 @@ with open('plain.txt') as file:
                 byte = ''
                 count = 0
 
-#print (byteList)
-
 key = 0
-#key = 110
 
 accept = False
 
@@ -46,5 +43,10 @@ while not accept:
 
     for decodedValue in decodedCharList:
         print(decodedValue, end="")
+
+    f = open('writeFile.txt', 'w')
+
+    f.write(''.join(decodedCharList))
+    f.close()
 
     accept = True
