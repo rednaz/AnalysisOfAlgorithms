@@ -18,20 +18,33 @@ with open('plain.txt') as file:
 
 #print (byteList)
 
-key = 78
+key = 0
+#key = 110
 
 accept = False
 
 while not accept:
     decodedList = list()
+    decodedCharList = list()
+
+    complete = True
+
+    print ("key = " + str(key))
 
     for byte in byteList:
         decodedValue = byte ^ key
+
+        if (decodedValue < 32 and decodedValue != 10) or decodedValue > 122 or (decodedValue > 59 and decodedValue < 65):
+            complete = False
+            break
         decodedList.append(decodedValue)
+        decodedCharList.append(chr(decodedValue))
 
-    for decodedValue in decodedList:
-        print(chr(decodedValue), end=" ")
-    input('Is this correct? ')
-        #accept = True
+    if not complete:
+        key += 1
+        continue
 
-    key += 1
+    for decodedValue in decodedCharList:
+        print(decodedValue, end="")
+
+    accept = True
